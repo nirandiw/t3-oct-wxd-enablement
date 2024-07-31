@@ -2,7 +2,6 @@ import os, time
 from elasticsearch import helpers
 from connection import connect_wxd
 from utils import load_json, save_json
-from chunk import gen_processed
 
 elser_model_name = ".elser_model_2"
 # elser_model_name = ".elser_model_2_linux-x86_64"
@@ -60,24 +59,24 @@ def create_hybrid_pipeline(ingest_pipeline_id, client):
                     ],
                 },
             },
-            {
-                "inference": {
-                    "model_id": "sentence-transformers__all-minilm-l12-v2",
-                    "input_output": {
-                        "input_field": "web_text",
-                        "output_field": "web_text_sentence_embedding",
-                    },
-                }
-            },
-            {
-                "inference": {
-                    "model_id": elser_model_name,
-                    "input_output": {
-                        "input_field": "heading",
-                        "output_field": "heading_embedding",
-                    },
-                }
-            }
+            # {
+            #     "inference": {
+            #         "model_id": "sentence-transformers__all-minilm-l12-v2",
+            #         "input_output": {
+            #             "input_field": "web_text",
+            #             "output_field": "web_text_sentence_embedding",
+            #         },
+            #     }
+            # },
+            # {
+            #     "inference": {
+            #         "model_id": elser_model_name,
+            #         "input_output": {
+            #             "input_field": "heading",
+            #             "output_field": "heading_embedding",
+            #         },
+            #     }
+            # }
         ],
     )
 
@@ -92,20 +91,12 @@ def create_hybrd_index(index_name, ingest_pipeline_id, client):
             "properties": {
                 "web_text": {"type": "text"},
                 "web_text_embedding": {"type": "sparse_vector"},
-                "heading_embedding": {"type": "sparse_vector"},
-                "web_text_sentence_embedding": {
-                    "type": "dense_vector",
-                    "dims": 384,
-                    "similarity": "cosine",
-                },
-                # pagerank only
-                "pagerank": {
-                    "type": "rank_feature"
-                },
-                "url_length": {
-                    "type": "rank_feature",
-                    "positive_score_impact": False
-                }
+                # "heading_embedding": {"type": "sparse_vector"},
+                # "web_text_sentence_embedding": {
+                #     "type": "dense_vector",
+                #     "dims": 384,
+                #     "similarity": "cosine",
+                # },
             }
         },
     )
@@ -161,42 +152,47 @@ def ingest_parallel_bulk(client, documents_gen, chunk_size):
     print(f"Ingestion completed: {time.time() - start_ingest_t}s")
 
 
+def gen_processed(f, index_name, ingest_pipeline_id):
+    # f = "data/student_chunked.json"
+    docs = load_json(f)
+    print(len(docs), "documents loaded")
+    for d in docs:
+        yield {
+            "_index": index_name,
+            "_id": d["id"],
+            'pipeline': ingest_pipeline_id,
+            "_source": d
+        }
+
+
 if __name__ == "__main__":
 
     client = connect_wxd()
-    index_name = "student-pagerank-hybrid-update"
-    ingest_pipeline_id = "ingest-pipeline-pagerank-hybrid-v2"
+    index_name = "ibm-ce-aili-v1"
+    ingest_pipeline_id = "ibm-ce-ingest-pipeline-sparse-v1"
 
-    # create_hybrid_pipeline(ingest_pipeline_id, client)
+    create_hybrid_pipeline(ingest_pipeline_id, client)
     #
     # create_elser_pipeline(ingest_pipeline_id, client)
     # if not client.indices.exists(index=index_name):
     create_hybrd_index(index_name, ingest_pipeline_id, client)
 
-    # document_path = "data/askauckland.json"
-    # d_paths = ["data/askauckland.json",
-    #            "data/courseoutlines.json",
-    #            "data/main.json",
-    #            "data/scholarships.json",
-    #            "data/studyoptions.json"]
-    # documents_gen = gen_docs(document_path,index_name,ingest_pipeline_id)
+
     t_start_all = time.time()
-    # chunks = gen_processed('data/staff_STC_chunked.json',
-    #                        index_name, ingest_pipeline_id)
-    # ingest_parallel_bulk(client, chunks, chunk_size=100)
 
-    parts_folder = 'data/student_chunked_pagerank_parts/'
-    wd_jsons = os.listdir(parts_folder)
-    wd_jsons = sorted(wd_jsons)
-    print(wd_jsons)
-    print(f"ingesting {wd_jsons}")
 
-    for f in wd_jsons[:1]:
-        print(f)
-        chunks_gen = gen_processed(parts_folder+f,
-                                index_name,
-                                ingest_pipeline_id)
-        ingest_parallel_bulk(client, chunks_gen, chunk_size=200)
+    # parts_folder = '../student_chunked_pagerank_parts/'
+    # wd_jsons = os.listdir(parts_folder)
+    # wd_jsons = sorted(wd_jsons)
+    # print(wd_jsons)
+    # print(f"ingesting {wd_jsons}")
+
+    # for f in wd_jsons[:1]:
+        # print(f)
+    chunks_gen = gen_processed("../legal_chunked.json",
+                            index_name,
+                            ingest_pipeline_id)
+    ingest_parallel_bulk(client, chunks_gen, chunk_size=200)
 
 
     # for d in d_paths:
