@@ -4,44 +4,6 @@ from connection import connect_wxd
 from utils import load_json, save_json
 
 elser_model_name = ".elser_model_2"
-# elser_model_name = ".elser_model_2_linux-x86_64"
-
-def create_elser_pipeline(ingest_pipeline_id, client):
-    # client.delete_pipeline(ingest_pipeline_id)
-    client.ingest.put_pipeline(
-        id=ingest_pipeline_id,
-        description="Ingest pipeline for ELSER",
-        processors=[
-            {
-                "inference": {
-                    "model_id": elser_model_name,
-                    "input_output": [
-                        {"input_field": "web_text",
-                         "output_field": "web_text_embedding"}
-                    ],
-                }
-            }
-        ],
-    )
-
-
-def create_index(index_name, ingest_pipeline_id, client):
-    # Create a new index
-    client.indices.delete(index=index_name, ignore_unavailable=True)
-    client.indices.create(
-        index=index_name,
-        settings={"index": {"default_pipeline": ingest_pipeline_id}},
-        mappings={
-            "properties": {
-                "web_text": {
-                    "type": "text",
-                    "fields": {
-                        "keyword": {"type": "keyword", "ignore_above": 256}},
-                },
-                "web_text_embedding": {"type": "sparse_vector"},
-            }
-        },
-    )
 
 
 def create_hybrid_pipeline(ingest_pipeline_id, client):
@@ -59,15 +21,15 @@ def create_hybrid_pipeline(ingest_pipeline_id, client):
                     ],
                 },
             },
-            # {
-            #     "inference": {
-            #         "model_id": "sentence-transformers__all-minilm-l12-v2",
-            #         "input_output": {
-            #             "input_field": "web_text",
-            #             "output_field": "web_text_sentence_embedding",
-            #         },
-            #     }
-            # },
+            {
+                "inference": {
+                    "model_id": "sentence-transformers__all-minilm-l12-v2",
+                    "input_output": {
+                        "input_field": "web_text",
+                        "output_field": "web_text_sentence_embedding",
+                    },
+                }
+            },
             # {
             #     "inference": {
             #         "model_id": elser_model_name,
@@ -81,7 +43,7 @@ def create_hybrid_pipeline(ingest_pipeline_id, client):
     )
 
 
-def create_hybrd_index(index_name, ingest_pipeline_id, client):
+def create_hybrid_index(index_name, ingest_pipeline_id, client):
     # Create a new index
     client.indices.delete(index=index_name, ignore_unavailable=True)
     client.indices.create(
@@ -92,52 +54,15 @@ def create_hybrd_index(index_name, ingest_pipeline_id, client):
                 "web_text": {"type": "text"},
                 "web_text_embedding": {"type": "sparse_vector"},
                 # "heading_embedding": {"type": "sparse_vector"},
-                # "web_text_sentence_embedding": {
-                #     "type": "dense_vector",
-                #     "dims": 384,
-                #     "similarity": "cosine",
-                # },
+                "web_text_sentence_embedding": {
+                    "type": "dense_vector",
+                    "dims": 384,
+                    "similarity": "cosine",
+                },
             }
         },
     )
 
-
-def load_documents(filename, index_name, ingest_pipeline_id, save_copy = True):
-    # Load documents into an array
-    docs = load_json(filename)
-    documents = []
-    for i, s in enumerate(docs):
-        if "text" not in s.keys():
-            continue
-        t = s["title"][0] + " " + s["text"][0]
-        url = s["url"]
-        documents.append(
-            {
-                "_index": index_name,
-                'pipeline': ingest_pipeline_id,
-                "_source": {"id": i, "web_text": t, "url": url},
-            }
-        )
-    print(f"{len(documents)} documents loaded!")
-    if save_copy:
-        save_json(documents, "data/documents.json")
-    return documents
-
-
-def gen_docs(filename, index_name, ingest_pipeline_id):
-    docs = load_json(filename)
-    print(f"{len(docs)} documents loaded!")
-    for i, s in enumerate(docs):
-        if "text" not in s.keys():
-            continue
-        t = s["title"][0] + " " + s["text"][0]
-        url = s["url"]
-        doc = {
-            "_index": index_name,
-            'pipeline': ingest_pipeline_id,
-            "_source": {"id": i, "web_text": t, "url": url}
-        }
-        yield doc
 
 
 def ingest_parallel_bulk(client, documents_gen, chunk_size):
@@ -168,14 +93,14 @@ def gen_processed(f, index_name, ingest_pipeline_id):
 if __name__ == "__main__":
 
     client = connect_wxd()
-    index_name = "ibm-ce-aili-v1"
-    ingest_pipeline_id = "ibm-ce-ingest-pipeline-sparse-v1"
+    index_name = "ibm-ce-aili-hybrid"
+    ingest_pipeline_id = "ibm-ce-ingest-pipeline-hybrid-v1"
 
     create_hybrid_pipeline(ingest_pipeline_id, client)
     #
     # create_elser_pipeline(ingest_pipeline_id, client)
     # if not client.indices.exists(index=index_name):
-    create_hybrd_index(index_name, ingest_pipeline_id, client)
+    create_hybrid_index(index_name, ingest_pipeline_id, client)
 
 
     t_start_all = time.time()
