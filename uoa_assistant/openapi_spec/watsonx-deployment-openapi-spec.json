@@ -1,0 +1,113 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "IBM Cloud Machine Learning Deployment Space API",
+    "description": "API for interacting with IBM Cloud Machine Learning services.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://us-south.ml.cloud.ibm.com/ml/v1"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "oauth2": {
+        "type": "oauth2",
+        "flows": {
+          "x-apikey": {
+            "tokenUrl": "https://iam.cloud.ibm.com/identity/token",
+            "grantType": "urn:ibm:params:oauth:grant-type:apikey",
+            "secretKeys": ["apikey"],
+            "paramKeys": [],
+            "scopes": {}
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "oauth2": []
+    }
+  ],
+
+  "paths": {
+    "/deployments/{deployment_id_or_service_name}/text/generation": {
+      "post": {
+        "summary": "Generation",
+        "parameters": [
+          {
+            "name": "deployment_id_or_service_name",
+            "in": "path",
+            "required": true,
+            "description": "Deployment ID or Service Name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": true,
+            "description": "API version",
+            "schema": {
+              "type": "string",
+              "default": "2021-05-01"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "ML deployment space parameters",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["parameters"],
+                "properties": {
+                  "parameters": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "model_id": {
+                      "description": "The ID of the model to be used for this request",
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "description": "The date and time of the response",
+                      "type": "string"
+                    },
+                    "results": {
+                      "type": "array",
+                      "description": "Outputs of the generation"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request due to invalid or missing authorisation token"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    }
+  }
+}
