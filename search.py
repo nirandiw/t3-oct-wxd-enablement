@@ -20,8 +20,8 @@ response = client.search(
     index=index_names,
     size=30,
     query=get_query(user_query),
-    # knn=get_knn(user_query),
-    # rank=get_rank()
+    knn=get_knn(user_query),
+    rank=get_rank(),
     collapse= {"field": "url.keyword"}
 
 )

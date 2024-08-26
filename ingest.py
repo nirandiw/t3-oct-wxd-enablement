@@ -7,7 +7,7 @@ elser_model_name = ".elser_model_2"
 
 
 def create_hybrid_pipeline(ingest_pipeline_id, client):
-    # client.ingest.delete_pipeline(ingest_pipeline_id)
+    # client.ingest.delete_pipeline(id=ingest_pipeline_id)
     client.ingest.put_pipeline(
         id=ingest_pipeline_id,
         description="Ingest pipeline for Elser encoding and dense encoding",
@@ -93,39 +93,19 @@ def gen_processed(f, index_name, ingest_pipeline_id):
 if __name__ == "__main__":
 
     client = connect_wxd()
-    index_name = "ibm-ce-aili-hybrid"
-    ingest_pipeline_id = "ibm-ce-ingest-pipeline-hybrid-v1"
+    index_name = "ibm-ce-aili-hybrid-local"
+    ingest_pipeline_id = "ibm-ce-ingest-pipeline-hybrid-local"
 
     create_hybrid_pipeline(ingest_pipeline_id, client)
-    #
-    # create_elser_pipeline(ingest_pipeline_id, client)
-    # if not client.indices.exists(index=index_name):
+    
     create_hybrid_index(index_name, ingest_pipeline_id, client)
-
-
     t_start_all = time.time()
 
-
-    # parts_folder = '../student_chunked_pagerank_parts/'
-    # wd_jsons = os.listdir(parts_folder)
-    # wd_jsons = sorted(wd_jsons)
-    # print(wd_jsons)
-    # print(f"ingesting {wd_jsons}")
-
-    # for f in wd_jsons[:1]:
-        # print(f)
     chunks_gen = gen_processed("../legal_chunked.json",
                             index_name,
                             ingest_pipeline_id)
     ingest_parallel_bulk(client, chunks_gen, chunk_size=200)
 
-
-    # for d in d_paths:
-    #     d_start = time.time()
-    #     chunks_gen = gen_chunks(d, index_name, ingest_pipeline_id)
-    #     ingest_parallel_bulk(client, chunks_gen, chunk_size=50)
-    #     print(f"Ingestion time for {d}: {time.time() - d_start}" )
-    # ingest_parallel_bulk(client, chunks, chunk_size=50)
     print(f"Total Ingestion time: {time.time() - t_start_all}" )
 
 
