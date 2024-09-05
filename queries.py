@@ -4,7 +4,7 @@ def get_query(query, model=".elser_model_2"):
 
     QUERY_BASIC_ELSER={
             "text_expansion": {
-                elser_embedding: {
+            "web_text_embedding":{
                     "model_id": model,
                     "model_text": query,
                 }
@@ -16,20 +16,15 @@ def get_query(query, model=".elser_model_2"):
       "should": [
         {
           "text_expansion": {
-            "web_text_sparse_embedding": {
+            "web_text_embedding":{
               "model_text": query,
               "model_id": ".elser_model_2"
             }
           }
         },
         {
-        #   "query_string": {
-        #     "query": query,
-        #     "default_field": "web_text"
-        #   }
             "match":{
                 "text":{"query":query,
-                        #  "boost":1.5
                          }
             }
         }
@@ -47,9 +42,33 @@ def get_query(query, model=".elser_model_2"):
     
     return QUERY_BM25_ELSER
 
+def get_all():
+    QUERY_MATCH_ALL ={
+        "match_all" : {} 
+    }
+    return QUERY_MATCH_ALL
+
+def doc_exists(id):
+    QUERY_DOC_CHECK ={
+        "match" : {"id":id} 
+    }
+    return QUERY_DOC_CHECK
 
 def get_knn(query):
 
+    KNN_BGE={
+        #"field":"web_text_dense",
+        "field":"web_text_sentence_bge_embedding",
+        "query_vector_builder": {
+        "text_embedding": {
+            "model_id": "baai__bge-large-en-v1.5",
+            "model_text": query,
+        }
+    },
+    "k": 10,
+    "num_candidates": 50
+    }
+    
     KNN_MINILM={
         #"field":"web_text_dense",
         "field":"web_text_sentence_minllm_embedding",
@@ -62,7 +81,9 @@ def get_knn(query):
     "k": 10,
     "num_candidates": 50
     }
-    return KNN_MINILM
+    
+    
+    return KNN_BGE
 
 def get_rank():
     RANK_BASIC={"rrf": { "window_size": 30,

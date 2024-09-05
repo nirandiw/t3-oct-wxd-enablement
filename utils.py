@@ -105,18 +105,18 @@ def save_json(data, filename):
 #     print(
 #         f"CSV data has been successfully converted to JSON and saved to {json_file_path}.")
 
-# def part_json(file_path,output_folder_path):
-#     chuncked_data = load_json(file_path)
-#     print(len(chuncked_data))
-#     size = 10000
-#     chuncked_data_json_files = [chuncked_data[x:x + size] for x in
-#                                 range(0, len(chuncked_data), size)]
-#     print(len(chuncked_data_json_files))
-#     i = 0
-#     for chuncked_data_json_file in chuncked_data_json_files:
-#         save_json(chuncked_data_json_file,
-#                   output_folder_path + '/part-' + str(i) + ".json")
-#         i = i + size
+def part_json(file_path,output_folder_path):
+    chuncked_data = load_json(file_path)
+    print(len(chuncked_data))
+    size = 5000
+    chuncked_data_json_files = [chuncked_data[x:x + size] for x in
+                                range(0, len(chuncked_data), size)]
+    print(len(chuncked_data_json_files))
+    i = 0
+    for chuncked_data_json_file in chuncked_data_json_files:
+        save_json(chuncked_data_json_file,
+                  output_folder_path + '/part-' + str(i) + ".json")
+        i = i + size
 
 # def rewrite_query_with_wxai(user_query_list):
 #     user_query = user_query_list[0]
@@ -203,23 +203,25 @@ def save_json(data, filename):
 #     embeddings = model.encode(query)
 #     # print(embeddings)
 #     return embeddings
-    
 
+def clean_text(text):
+
+    # Remove \r
+    text = re.sub(r'[\r]', ' ', text)
+    # Remove any Unicode characters
+    text = re.sub(r'\\u[0-9a-fA-F]{4}', '', text)
+    # Remove specific Unicode sequence \u00e2\u20ac\u00a2
+    pattern_to_remove = r'\\u00e2\\u20ac\\u00a2'
+    # Remove the escaped Unicode string using regex
+    text = re.sub(pattern_to_remove, '', text)
+    # Optionally, remove any additional unwanted sequences
+    text = re.sub(r'\s+', ' ', text).strip()  # Replace multiple spaces with a single space
+    return text
+    
+# def remove_chars(file_name):
+#     data = load_json(file_name)
+#     print(clean_text(data[0]['web_text']))
 
 if __name__ == "__main__":
-    # csv_name = "data/student_chunked_pagerank.csv"
-    # json_name = "data/student_chunked_pagerank.json"
-    # # csv_to_json(csv_name, json_name)
-    # # part_json("data/new_student_chunked.json", "data/new_student_parts")
-    # # page_ranks_docs = load_json('./data/combined_data_page_score.json')
-    # # pivot_pagerank = {pagerank['url']:pagerank['pagerank_score'] for pagerank in page_ranks_docs}
-    # docs = load_json('./data/pagerank/student_chunked_pagerank.json')
-    # print(min([doc["url_length"] for doc in docs]))
-    # part_json('./data/pagerank/student_chunked_pagerank.json', './data/pagerank/parts/')
-    
-    # data =load_json('./data/pagerank/student_chunked_pagerank.json')
-    # print(len(data))
-    # multiple_pagerank()
-    rewrite_goldref_queries()
-    # get_dense_encoding("How to apply to UoA")
+    part_json('../legal_chunked.json','../legal_chunks')
     

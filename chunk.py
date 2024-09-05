@@ -1,5 +1,5 @@
 import json
-from utils import load_json
+from utils import load_json, clean_text
 from llama_index.core.node_parser import SentenceSplitter
 
 
@@ -23,8 +23,8 @@ def gen_chunk_js():
                 doc = {
                     "id": doc_id + "_" + str(i_c),
                     "document_id": doc_id,
-                    "web_text": doc_heading + "\n" + chunk,
-                    "text": chunk,
+                    "web_text": doc_heading + "\n" + clean_text(chunk),
+                    "text": clean_text(chunk),
                     "heading": doc_heading
                 }
                 yield doc
@@ -42,4 +42,4 @@ def write_chunks_to_file(gen, output_name):
 if __name__ == "__main__":
     # chunks = gen_chunks_staff()
     chunks = gen_chunk_js()
-    write_chunks_to_file(chunks, "../legal_chunked.json")
+    write_chunks_to_file(chunks, "../legal_chunked_clean.json")
