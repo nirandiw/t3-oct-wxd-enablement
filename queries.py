@@ -40,7 +40,7 @@ def get_query(query, model=".elser_model_2"):
             }
     }
     
-    return QUERY_BM25_ELSER
+    return QUERY_BASIC_ELSER
 
 def get_all():
     QUERY_MATCH_ALL ={
@@ -66,7 +66,7 @@ def get_knn(query):
         }
     },
     "k": 10,
-    "num_candidates": 50
+    "num_candidates": 100
     }
     
     KNN_MINILM={

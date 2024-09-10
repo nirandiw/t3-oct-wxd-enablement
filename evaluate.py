@@ -11,12 +11,12 @@ if __name__ == "__main__":
 
 
     es_client=connect_wxd()
-    ref_set = pd.read_excel('../pb-13x3-qas.xlsx')
+    ref_set = pd.read_excel('../pb-13x3-qas-ibm.xlsx')
     ref_set['ID'] = ref_set.index
     queries = ref_set[['Question', 'ID', 'Document ID']]
     search_results_list = []
     max_top_hits =4
-    output_file_name="../evaluation-bge-elser-bm25-rrf-top"+str(max_top_hits)+"-v2.csv" 
+    output_file_name="../evaluation-bge-top"+str(max_top_hits)+"-v3.csv" 
     true_count=0
 
     try:
@@ -35,7 +35,7 @@ if __name__ == "__main__":
                     is_match = True if response[1].strip() in [hit['hit_doc_id'] for hit in top_hits[:max_top_hits]] else False #TODO check the space
                     true_count += 1 if is_match else 0
                     # Create the dictionary with the required values
-                    print(response[1].strip(), top_hits)
+                    # print(response[1].strip(), top_hits)
                     result_dict = {
                         "id":response[3],
                         "query": response[0],
@@ -60,7 +60,7 @@ if __name__ == "__main__":
                 
     dfoutput = pd.DataFrame(search_results_list)
     dfoutput.to_csv(output_file_name, index=False)
-    print(output_file_name, ':', np.divide(true_count, 39.0))
+    print(output_file_name, ':', np.divide(true_count, 639.0))
 
 
 

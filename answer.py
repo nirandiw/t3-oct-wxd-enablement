@@ -31,7 +31,7 @@ if __name__ == "__main__":
     
     es_client=connect_wxd()
 
-    ref_set = pd.read_excel('../pb-13x3-qas.xlsx')
+    ref_set = pd.read_excel('../pb-13x3-qas-ibm.xlsx')
     ref_set['ID'] = ref_set.index
     queries = ref_set[['Question', 'ID', 'Document ID']]
 
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     search_results_list = []
     max_top_hits =4
     max_answer_content = 4
-    output_file_name="../evaluation-answer"+str(max_answer_content)+"-tmp.csv" 
+    output_file_name="../evaluation-answer"+str(max_answer_content)+"-v2.csv" 
     true_count=0
 
     try:
@@ -95,4 +95,4 @@ if __name__ == "__main__":
                 
     dfoutput = pd.DataFrame(search_results_list)
     dfoutput.to_csv(output_file_name, index=False)
-    print(output_file_name, ':', np.divide(true_count, 39.0))
+    print(output_file_name, ':', np.divide(true_count, 639.0))

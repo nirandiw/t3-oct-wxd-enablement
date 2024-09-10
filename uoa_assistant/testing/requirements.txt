@@ -1,4 +1,0 @@
-urllib3
-pandas
-ibm_watson
-ibm_cloud_sdk_core
