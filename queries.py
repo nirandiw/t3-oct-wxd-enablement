@@ -2,14 +2,14 @@ def get_query(query, model=".elser_model_2"):
     
     elser_embedding = "web_text_sparse_embedding"#
 
-    QUERY_BASIC_ELSER={
-            "text_expansion": {
-            "web_text_embedding":{
-                    "model_id": model,
-                    "model_text": query,
-                }
-            },
-        }
+    # QUERY_BASIC_ELSER={
+    #         "text_expansion": {
+    #         "web_text_embedding":{
+    #                 "model_id": model,
+    #                 "model_text": query,
+    #             }
+    #         },
+    #     }
     
     QUERY_BM25_ELSER = {
     "bool": { 
@@ -32,15 +32,15 @@ def get_query(query, model=".elser_model_2"):
     }
     }
     
-    QUERY_BM25 = {
-        "match":{
-                "web_text":{"query":query,
-                        #  "boost":1.5
-                         }
-            }
-    }
+    # QUERY_BM25 = {
+    #     "match":{
+    #             "web_text":{"query":query,
+    #                     #  "boost":1.5
+    #                      }
+    #         }
+    # }
     
-    return QUERY_BASIC_ELSER
+    return QUERY_BM25_ELSER
 
 def get_all():
     QUERY_MATCH_ALL ={

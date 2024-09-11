@@ -4,12 +4,12 @@ from queries import get_knn, get_query, get_rank
 client = connect_wxd()
 
 def wxd_search(q_input):
-    es_client = q_input[3]
+    es_client = q_input[3] 
     query = q_input[0]
     print("Query: ",query)
-    golden_url = q_input[1]
+    golden_url = q_input[1] 
     id=q_input[2]
-    indeces = ['aili-hybrid-bge']#['ibm-ce-aili-hybrid-nw']
+    indeces = ['aili-hybrid-bge']
     response = es_client.search(
         index=indeces,
         size=5,
