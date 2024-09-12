@@ -28,5 +28,7 @@ Set `index_name`. Provide a name for your index.
 Set `ingest_pipeline_id` Provide a name for your pipeline.
 Run `python ingest.py` and it will ingest the documents to your index. The code creates a elasticsearch pipeline and generates embeddings using the BGE model and elserv2 model in Watsonx Discovery. 
 
-Advance setup: If you want to use ne embeddings bring your own embedding model as describred here <byom doc link> and change the index mapping and the pipeline accordinly. 
+(Optional) Additional setup: If you want to use another embedding bring your own embedding model as describred here <byom doc link> and change the index mapping and the pipeline accordinly in the `ingest.py` code. 
+
+
 
