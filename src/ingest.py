@@ -116,7 +116,7 @@ if __name__ == "__main__":
                                 index_name,
                                 ingest_pipeline_id)
         ingest_parallel_bulk(client, chunks_gen, chunk_size=200)
-
+        print("Ingest complete: ", file_name)
     print(f"Total Ingestion time: {time.time() - t_start_all}" )
     
 

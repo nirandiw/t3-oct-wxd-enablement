@@ -25,24 +25,34 @@ Create a `.env` file and add the following detail. Save the file in the `src` fo
     WXAI_APIKEY = <watsonx.ai api key>
     WXAI_PROJECT= <watsonx.ai project id>
 
+Sections below describe the components in our architecture.
 
-### Step 2: Upload data. 
+### Upload data. 
+Upload the data file `ibm_pr_clean.json` in to the data folder. [Link to the data](https://govteams.sharepoint.com/:u:/r/sites/atoibm/Shared%20Documents/06.%20Data/pr_clean.zip?csf=1&web=1&e=aHTGLr)
 
-Upload the data file `ibm_pr_clean.json` in to the data folder. [Link to the data](https://govteams.sharepoint.com/:x:/r/sites/atoibm/Shared%20Documents/06.%20Data/pb-13x3-qas.xlsx?d=w4372d7af65d644388bf54fc72de1858e&csf=1&web=1&e=HOeRGw)
-
-### Step 2: Chunk the data using `chunk.py`
-
+### Chunk the data using `chunk.py`
 Create the folder `./data/chunks`.
 Go the to `src` folder in the terminal.
 Run `python chunk.py` to chunk the raw data and safe chunks in the folder folder.  
 You can change the `chunk size` and `chunck overlap` values for different experiments. 
 
-### Step 3: Ingest the chunked documents using `ingest.py`
+### Ingest the chunked documents using `ingest.py`
 Set `index_name`. Provide a name for your index.
 Set `ingest_pipeline_id` Provide a name for your pipeline.
 Run `python ingest.py` and it will ingest the documents to your index. The code creates a elasticsearch pipeline and generates embeddings using the BGE model and elserv2 model in Watsonx Discovery. 
 
-(Optional) Additional setup: If you want to use another embedding bring your own embedding model as describred here <byom doc link> and change the index mapping and the pipeline accordinly in the `ingest.py` code. 
+(Optional) Additional setup: If you want to use another embedding bring your own embedding model as describred here [BYOM.md](url) in to elastic search and change the index mapping and the pipeline accordinly in the `ingest.py` code with the correct model names. 
+
+Note: Sometimes bulk ingest fails. Then restart the upload from where the last json file it loaded. Re-upload will not create duplicates. 
+
+### Search using `search.py`
+Note your index. The index IBM CE created for AILI is `aili-hybrid-bge`. You can reuse it for searching. 
+Change the `user_query` to your question. 
+Run `python search.py`. 
+You can see the results returned from Watsonx Discovery. 
+
+### Search Evaluation using `evaluate.py`
+
 
 
 

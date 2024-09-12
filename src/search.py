@@ -1,7 +1,7 @@
 import time
 from connection import connect_wxd
 from queries import get_knn, get_query, get_rank
-client = connect_wxd()
+
 
 def wxd_search(q_input):
     es_client = q_input[3] 
@@ -19,20 +19,23 @@ def wxd_search(q_input):
     )
     return [query, golden_url, response, id]
 
-if __name__ == "__main__":
+def wxd_search_basic(client, query, index):
+    response = client.search(
+        index=index,
+        size=30,
+        query=get_query(query),
+        knn=get_knn(query),
+        rank=get_rank(),
+    )
+    return response
 
-    index_names = ['aili-hybrid-emb3-local']
+if __name__ == "__main__":
+    client = connect_wxd()
+    index_names = ["aili-hybrid-bge"]
     user_query = "in Australia, under section 160WA, how should a liquidator notify the relevant shareholders?"
     start_t = time.time()
 
-    response = client.search(
-        index=index_names,
-        size=30,
-        # query=get_query(user_query),
-        knn=get_knn(user_query),
-        # rank=get_rank(),
-    )
-
+    response = wxd_search_basic(client,user_query, index_names )
 
     print("== Search took: ", time.time() - start_t, " seconds ==")
     for i, hit in enumerate(response["hits"]["hits"]):
