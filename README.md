@@ -43,7 +43,7 @@ Upload the data file `ibm_pr_clean.json` in to the data folder. [Link to the dat
 
 (Optional) Additional setup: If you want to use another embedding bring your own embedding model as describred here [BYOM.md](url) in to elastic search and change the index mapping and the pipeline accordinly in the `ingest.py` code with the correct model names. 
 
-Note: Sometimes bulk ingest fails. Then restart the upload from where the last json file it loaded. Re-upload will not create duplicates. 
+Note: Sometimes bulk ingest fails. Restart the script excluding the files that were successful. Re-upload partially uploaded json files will not create duplicates. 
 
 ### Search using `search.py`
 1. Note your index. The index IBM CE created for AILI is `aili-hybrid-bge`. You can reuse it for searching. 
@@ -51,8 +51,9 @@ Note: Sometimes bulk ingest fails. Then restart the upload from where the last j
 3. Run `python search.py`. 
 4. You can see the results returned from Watsonx Discovery. 
 
-### Search Evaluation using `evaluate.py`
-
-
+### Evaluate search results using `evaluate.py`
+1. Upload the questions you want to evaluate to the `./data/` folder. 
+  1. ATO 39 questions[pb-13x3-qas.xlsx](https://govteams.sharepoint.com/:x:/r/sites/atoibm/Shared%20Documents/06.%20Data/pb-13x3-qas.xlsx?d=w4372d7af65d644388bf54fc72de1858e&csf=1&web=1&e=JHIz6S)
+  2. IBM generated questions plus ATO questions[pb-13x3-qas-ibm.xlsx](https://govteams.sharepoint.com/:x:/r/sites/atoibm/Shared%20Documents/06.%20Data/pb-13x3-qas-ibm.xlsx?d=w35d907a4b9bf46ff9a81515fd0942deb&csf=1&web=1&e=kP0ceo)
 
 
