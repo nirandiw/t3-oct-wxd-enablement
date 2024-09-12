@@ -1,18 +1,30 @@
 ### AILI Smarter Search and Answer generation
 This reposity maintains the code used in the IBM CE-ATO AILI project.
 
-This code implements this architecture for AILI smarter search and answer generation connecting
+This code implements this architecture for AILI smarter search and answer generation.
 ![aili](https://github.ibm.com/anz-tech-garage/ce-ato-aili/blob/main/AILI_architecture.png)
 
 Following services are hosted in the IBM Cloud - Australian Taxanation Office (2791946) acount.
-1. IBM Watsonx Discovery (IBM Cloud Australian Taxanation Office (2791946)-> Databases-> ElasticSearch) 
-2. watsonx.ai service (IBM Cloud Australian Taxanation Office (2791946)-> AI/Machine Learning-> Watson Machine Learning) 
+1. IBM Watsonx Discovery 
+2. watsonx.ai service 
 You must have access to this account. 
 
 ### Step 1:
 Code was developed using a `Python 3.11` environment.
 Other packages needed are listed in the `requirements.txt` file. 
 Run  `pip install requirements.txt`. 
+
+### Step 2:
+Create a `.env` file and add the following detail. Save the file in the `src` folder. 
+`
+ES_ENDPOINT = <login to your ibm cloud and find the elasticsearch url under service credentials>
+ES_CERT_PATH = <download the elasticsearch certificate and save it in your local machine as ca.crt. Provide the path>
+ES_USERNAME = <elasticsearch username>
+ES_PWD = <elsticsearch password>
+WXAI_URL = "https://us-south.ml.cloud.ibm.com"
+WXAI_APIKEY = <watsonx.ai api key>
+WXAI_PROJECT= <watsonx.ai project id>
+`
 
 ### Step 2: Upload data. 
 
