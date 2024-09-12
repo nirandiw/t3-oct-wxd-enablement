@@ -1,6 +1,5 @@
 def get_query(query, model=".elser_model_2"):
     
-    elser_embedding = "web_text_sparse_embedding"#
 
     # QUERY_BASIC_ELSER={
     #         "text_expansion": {
@@ -90,10 +89,3 @@ def get_rank():
             "rank_constant": 20}}
     return RANK_BASIC
 
-
-
-
-    
-if __name__ == "__main__":
-
-    rewrite_query_with_wxai("I want contact UoA")

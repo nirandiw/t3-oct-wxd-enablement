@@ -11,12 +11,14 @@ if __name__ == "__main__":
 
 
     es_client=connect_wxd()
-    ref_set = pd.read_excel('../data/pb-13x3-qas-ibm.xlsx')
+    doc="pb-13x3-qas.xlsx"
+    # doc = "ibm-questions-600.xlsx"
+    ref_set = pd.read_excel('../data/'+doc)
     ref_set['ID'] = ref_set.index
     queries = ref_set[['Question', 'ID', 'Document ID']]
     search_results_list = []
     max_top_hits =4
-    output_file_name="../evaluation-bge-top"+str(max_top_hits)+"-v3.csv" 
+    output_file_name="../output/evaluation-bge-top"+str(max_top_hits)+"-"+doc+"v3.csv" 
     true_count=0
 
     try:
@@ -60,7 +62,11 @@ if __name__ == "__main__":
                 
     dfoutput = pd.DataFrame(search_results_list)
     dfoutput.to_csv(output_file_name, index=False)
-    print(output_file_name, ':', np.divide(true_count, 639.0))
+    total_records = ref_set.shape[0]+0.0
+    print("Total number of records: ", total_records)
+    print("Matched records: ", true_count)
+    print("Match Accuracy Percentage: ",np.divide(true_count, total_records))
+    print("Outpt file: ", output_file_name)
 
 
 
