@@ -16,19 +16,19 @@ Run  `pip install requirements.txt`.
 
 ### Step 2:
 Create a `.env` file and add the following detail. Save the file in the `src` folder. 
-`
-ES_ENDPOINT = <login to your ibm cloud and find the elasticsearch url under service credentials>
-ES_CERT_PATH = <download the elasticsearch certificate and save it in your local machine as ca.crt. Provide the path>
-ES_USERNAME = <elasticsearch username>
-ES_PWD = <elsticsearch password>
-WXAI_URL = "https://us-south.ml.cloud.ibm.com"
-WXAI_APIKEY = <watsonx.ai api key>
-WXAI_PROJECT= <watsonx.ai project id>
-`
+
+    ES_ENDPOINT = <login to your ibm cloud and find the elasticsearch url under service credentials>
+    ES_CERT_PATH = <download the elasticsearch certificate and save it in your local machine as ca.crt. Provide the path>
+    ES_USERNAME = <elasticsearch username>
+    ES_PWD = <elsticsearch password>
+    WXAI_URL = "https://us-south.ml.cloud.ibm.com"
+    WXAI_APIKEY = <watsonx.ai api key>
+    WXAI_PROJECT= <watsonx.ai project id>
+
 
 ### Step 2: Upload data. 
 
-Upload the data file `ibm_pr_clean.json` in to the data folder. [Link to the data] (https://govteams.sharepoint.com/:x:/r/sites/atoibm/Shared%20Documents/06.%20Data/pb-13x3-qas.xlsx?d=w4372d7af65d644388bf54fc72de1858e&csf=1&web=1&e=HOeRGw)
+Upload the data file `ibm_pr_clean.json` in to the data folder. [Link to the data](https://govteams.sharepoint.com/:x:/r/sites/atoibm/Shared%20Documents/06.%20Data/pb-13x3-qas.xlsx?d=w4372d7af65d644388bf54fc72de1858e&csf=1&web=1&e=HOeRGw)
 
 ### Step 2: Chunk the data using `chunk.py`
 
