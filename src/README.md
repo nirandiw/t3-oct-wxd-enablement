@@ -1,9 +1,8 @@
-Code for smarter search using watsonx Discovery
+### AILI Smarter Search and Answer generation
+This reposity maintains the code used in the IBM CE-ATO AILI project.
 
-This reposity maintains the code used in the ATO AILI project.
+This code implements ![this](https://github.ibm.com/anz-tech-garage/ce-ato-aili/blob/main/AILI_architecture.png) architecture for AILI smarter search and answer generation connecting
 
-This code implements the following architecture for AILI smarter search and answer generation connecting
-![alt text](https://github.com/kamango/CE-AILI/AILI_architecture.png?raw=true)
 
 Following services are hosted in the IBM Cloud - Australian Taxanation Office (2791946)
 1. IBM Watsonx Discovery (IBM Cloud Australian Taxanation Office (2791946)-> Databases-> ElasticSearch) 
