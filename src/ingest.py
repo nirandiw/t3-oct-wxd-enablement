@@ -105,7 +105,7 @@ if __name__ == "__main__":
     
     create_hybrid_index(index_name, client)
     
-    chunks_folder = '../legal_chunks'
+    chunks_folder = '../data/chunks'
     file_names = os.listdir(chunks_folder)
 
     t_start_all = time.time()
@@ -119,7 +119,5 @@ if __name__ == "__main__":
 
     print(f"Total Ingestion time: {time.time() - t_start_all}" )
     
-    #50000 --> 4737
-    # 65000 -> 69997
 
 

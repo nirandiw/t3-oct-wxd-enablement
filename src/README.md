@@ -1,0 +1,32 @@
+Code for smarter search using watsonx Discovery
+
+This reposity maintains the code used in the ATO AILI project.
+
+This code implements the following architecture for AILI smarter search and answer generation connecting
+![alt text](https://github.com/kamango/CE-AILI/AILI_architecture.png?raw=true)
+
+Following services are hosted in the IBM Cloud - Australian Taxanation Office (2791946)
+1. IBM Watsonx Discovery (IBM Cloud Australian Taxanation Office (2791946)-> Databases-> ElasticSearch) 
+2. watsonx.ai service (IBM Cloud Australian Taxanation Office (2791946)-> AI/Machine Learning-> Watson Machine Learning) 
+
+### Step 1:
+Code was developed using Python 3.11 and run  `pip install requirements.txt`. 
+
+### Step 2: Upload data. 
+
+Upload the datafile eg: `ibm_pr_clean.json` in to the data folder. Link to the data:<https://govteams.sharepoint.com/:x:/r/sites/atoibm/Shared%20Documents/06.%20Data/pb-13x3-qas.xlsx?d=w4372d7af65d644388bf54fc72de1858e&csf=1&web=1&e=HOeRGw>
+
+### Step 2: Chunk the data using `chunk.py`
+
+Create the folder `./data/chunks`.
+Go the to `src` folder in the terminal.
+Run `python chunk.py` to chunk the raw data and safe chunks in the folder folder.  
+You can change the `chunk size` and `chunck overlap` values for different experiments. 
+
+### Step 3: Ingest the chunked documents using `ingest.py`
+Set `index_name`. Provide a name for your index.
+Set `ingest_pipeline_id` Provide a name for your pipeline.
+Run `python ingest.py` and it will ingest the documents to your index. The code creates a elasticsearch pipeline and generates embeddings using the BGE model and elserv2 model in Watsonx Discovery. 
+
+Advance setup: If you want to use ne embeddings bring your own embedding model as describred here <byom doc link> and change the index mapping and the pipeline accordinly. 
+

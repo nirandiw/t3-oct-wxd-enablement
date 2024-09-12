@@ -12,12 +12,11 @@ def wxd_search(q_input):
     indeces = ['aili-hybrid-bge']
     response = es_client.search(
         index=indeces,
-        size=5,
+        size=10,
         query=get_query(query),
         knn=get_knn(query),
         rank= get_rank(),
     )
-    # print(response)
     return [query, golden_url, response, id]
 
 if __name__ == "__main__":

@@ -1,10 +1,10 @@
 import json
 from utils import load_json, clean_text
 from llama_index.core.node_parser import SentenceSplitter
-
+from utils import part_json
 
 def gen_chunk_js():
-    d_paths = ["../ibm_pr_clean.json"]
+    d_paths = ["../data/ibm_pr_clean.json"]
 
     text_parser = SentenceSplitter(
         chunk_size=200,
@@ -42,4 +42,6 @@ def write_chunks_to_file(gen, output_name):
 if __name__ == "__main__":
     # chunks = gen_chunks_staff()
     chunks = gen_chunk_js()
-    write_chunks_to_file(chunks, "../legal_chunked_clean.json")
+    chunk_file = "../data/legal_chunked_clean.json"
+    write_chunks_to_file(chunks,chunk_file)
+    part_json(chunk_file, '../data/chunks')

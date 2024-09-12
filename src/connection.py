@@ -5,7 +5,6 @@ from elasticsearch import Elasticsearch
 
 def connect_wxd():
     load_dotenv()
-
     wxd_endpoint = os.environ["ES_ENDPOINT"]
     wxd_username = os.environ["ES_USERNAME"]
     wxd_pwd = os.environ["ES_PWD"]
@@ -40,15 +39,3 @@ def connect_wxai():
     
 if __name__ == "__main__":
     client = connect_wxd()
-
-    # resp = client.cat.indices(
-    #     index="*",
-    #     v="true",
-    #     s="index",
-    # )
-    # print(resp)
-
-    # resp = client.indices.get_mapping(
-    #     index="test_elser_index_5",
-    # )
-    # print(resp)
