@@ -7,9 +7,7 @@ import concurrent.futures as cf
 import numpy as np
 from connection import connect_wxd
 
-
-
-def gen_answer(client, content, query, deployment_id="77a896f6-8236-48ea-8948-b6c1a41ad95a"):
+def gen_answer(client, content, query, deployment_id="3c2f110a-c0ec-4e31-bd16-5882787c493a"):
     params_dict ={ "prompt_variables": { 
         "content": content,
         "query": query } 
@@ -21,7 +19,6 @@ def gen_answer(client, content, query, deployment_id="77a896f6-8236-48ea-8948-b6
     return response
 
 
-
 if __name__ == "__main__":
     wxai_cred = connect_wxai()
     
@@ -30,8 +27,9 @@ if __name__ == "__main__":
     wx_client.set.default_space(wxai_space_id)
     
     es_client=connect_wxd()
-
-    ref_set = pd.read_excel('../pb-13x3-qas-ibm.xlsx')
+    doc="pb-13x3-qas.xlsx"
+    # doc = "ibm-questions-600.xlsx"
+    ref_set = pd.read_excel('../data/'+doc)
     ref_set['ID'] = ref_set.index
     queries = ref_set[['Question', 'ID', 'Document ID']]
 
@@ -40,7 +38,7 @@ if __name__ == "__main__":
     search_results_list = []
     max_top_hits =4
     max_answer_content = 4
-    output_file_name="../evaluation-answer"+str(max_answer_content)+"-v2.csv" 
+    output_file_name="../output/evaluation-answer"+str(max_answer_content)+"-"+doc+"-v2.csv" 
     true_count=0
 
     try:
@@ -53,12 +51,12 @@ if __name__ == "__main__":
                     top_hits_urls=[]
                     top_hits=[]
                     for hit in response[2]["hits"]["hits"]:
-                        if hit["_source"]["document_id"] not in top_hits_urls:
-                            top_hits.append({"hit_doc_id":hit["_source"]["document_id"].strip(), "hit_score":hit["_score"], "hit_content":hit['_source']["web_text"]})
+                        # if hit["_source"]["document_id"] not in top_hits_urls:
+                        top_hits.append({"hit_doc_id":hit["_source"]["document_id"].strip(), "hit_score":hit["_score"], "hit_content":hit['_source']["web_text"]})
                     is_match = True if response[1].strip() in [hit['hit_doc_id'] for hit in top_hits[:max_top_hits]] else False #TODO check the space
                     true_count += 1 if is_match else 0
                     # Create the dictionary with the required values
-                    print(response[1].strip(), top_hits)
+                    # print(response[1].strip(), top_hits)
                     result_dict = {
                         "id":response[3],
                         "query": response[0],
@@ -81,8 +79,8 @@ if __name__ == "__main__":
                         "top_hit_5_content": top_hits[4]["hit_content"],
                     }
                     
-                    content = '\n'.join([hit['hit_content'] for hit in top_hits])
-                    answer = gen_answer(wx_client, content,response[0] )
+                    content = '\n'.join([hit['hit_content'] for hit in top_hits[:max_top_hits]])
+                    answer = gen_answer(wx_client, content,response[0])
                     result_dict["answer"] = answer
                     search_results_list.append(result_dict)
                 
@@ -95,4 +93,8 @@ if __name__ == "__main__":
                 
     dfoutput = pd.DataFrame(search_results_list)
     dfoutput.to_csv(output_file_name, index=False)
-    print(output_file_name, ':', np.divide(true_count, 639.0))
+    total_records = ref_set.shape[0]+0.0
+    print("Total number of records: ", total_records)
+    print("Matched records: ", true_count)
+    print("Match Accuracy Percentage: ",np.divide(true_count, total_records))
+    print("Outpt file: ", output_file_name)

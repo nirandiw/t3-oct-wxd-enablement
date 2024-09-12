@@ -26,6 +26,8 @@ Create a `.env` file and add the following detail. Save the file in the `src` fo
     WXAI_PROJECT= <watsonx.ai project id>
 
 Sections below describe the components in our architecture.
+### Establish connection using `connection.py`
+Run `python connection.py` and ensure your Watsonx Discovery credentials are working. 
 
 ### Upload data. 
 Upload the data file `ibm_pr_clean.json` in to the data folder. [Link to the data](https://govteams.sharepoint.com/:u:/r/sites/atoibm/Shared%20Documents/06.%20Data/pr_clean.zip?csf=1&web=1&e=aHTGLr)
@@ -71,7 +73,32 @@ Variables are defined in `queries.py`.
   1.2 IBM generated questions plus ATO questions: [pb-13x3-qas-ibm.xlsx](https://govteams.sharepoint.com/:x:/r/sites/atoibm/Shared%20Documents/06.%20Data/pb-13x3-qas-ibm.xlsx?d=w35d907a4b9bf46ff9a81515fd0942deb&csf=1&web=1&e=kP0ceo)  
 2. Set `ref_set = pd.read_excel('../data/<your questions.xlsx>')` 
 3. Run `python evaluate.py`. Script fetches relevant documents from Watsonx Discovery and checks if it matches with the golden reference document ID. 
+4. Evalaution results are saved in the `output` folder. 
 
 We ignore any duplicate documents retrieved and returns the total match on the deduplicated retrieved results.
 
+### Generate LLM answers using `answer.py`
+`answer.py` follows a simple RAG implementation of AILI, using Watsonx Discovery and watsonx.ai and stores the answers in a outputfile. 
+
+1. Get your `deployment id` and `space id` from watsonx.ai.  
+  1.1 Deployment id of your answer generate prompt.  
+2. The default deployment id used for the IBM-ATO AILI PoC is set in this script.  
+  2.2 Pass your deployment id in `gen_answer()`  to your space id and deployment id
+3. Set `ref_set = pd.read_excel('../<your questions>.xlsx')` 
+4. Run `python answer.py`
+5. Answers generated are saved in the `output` folder. 
+
+### Generate new questions using `questions.py`
+
+Generates questions for two personas (1) Public and (2) Tax professional
+
+To be completed
+
+### `update.py`
+
+To be completed
+
+### `utils.py` 
+
+To be completed
 
