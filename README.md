@@ -80,25 +80,34 @@ We ignore any duplicate documents retrieved and returns the total match on the d
 ### Generate LLM answers using `answer.py`
 `answer.py` follows a simple RAG implementation of AILI, using Watsonx Discovery and watsonx.ai and stores the answers in a outputfile. 
 
-1. Get your `deployment id` and `space id` from watsonx.ai.  
-  1.1 Deployment id of your answer generate prompt.  
-2. The default deployment id used for the IBM-ATO AILI PoC is set in this script.  
-  2.2 Pass your deployment id in `gen_answer()`  to your space id and deployment id
-3. Set `ref_set = pd.read_excel('../<your questions>.xlsx')` 
-4. Run `python answer.py`
-5. Answers generated are saved in the `output` folder. 
+1. Get your `deployment id` and `space id` from watsonx.ai for the answe-generation prompt (i.e., `aili_answer`).  
+  1.1 The  deployment id used in this script is the answer-generation prompt deployed during the IBM-ATO AILI PoC.  
+  1.2 Pass your deployment id in the function `gen_answer()`  
+  1.3 Set the space id in the `main()` function. 
+2. Set `ref_set = pd.read_excel('../<your questions>.xlsx')` to your question set. 
+3. Run `python answer.py`
+4. Answers generated are saved in the `output` folder. 
 
 ### Generate new questions using `questions.py`
 
-Generates questions for two personas (1) Public and (2) Tax professional
+Generates AILI simulated questions for two personas (1) Public and (2) Tax professional. Because we only had access to limited number of questions we simulated possible questions using this script. 
 
-To be completed
+The question generation process is (1) Sample `100` documents (2) For each document generate `3` questions for each persona. 
+
+1. Get your `deployment id` and `space id` from the watsonx.ai for your question-generation prompt (i.e., `aili_questions_llama`)  
+  1.1 The deployement id used in this script is the question-generation prompt deployed during the IBM-ATO AILI PoC.  
+  1.2 Pass your deploymentid in the function `gen_questions()`
+  1.3 Set the space id in the `main()` function. 
+2. Run `python questions.py` 
+3. Generated questions are saved in the `output` folder. 
 
 ### `update.py`
 
 To be completed
 
-### `utils.py` 
+### Common functions in `utils.py` 
 
-To be completed
-
+1. `load_json(filename)` : loads a file as a json string
+2. `save_json(data, filename)`: save the data in a json file
+3. `part_json(file_path,output_folder_path)` : seperaetes a long list of json strings to seperate files for each ingestion. 
+4. `clean_text(text)` : cleans text before ingesting to watsonx disocvery. 
