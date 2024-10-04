@@ -1,7 +1,7 @@
 ### Smarter Search and Answer generation
 
-This code implements this architecture for AILI smarter search and answer generation.
-![aili](https://github.com/kamago/CE-AILI/blob/nirandi/AILI_architecture.png)
+This code implements this architecture for smarter search and answer generation.
+![aili](https://github.com/nirandiw/t3-oct-wxd-enablement/blob/main/arch.png)
 
 Following services are hosted in the IBM Cloud.
 1. IBM Watsonx Discovery 
