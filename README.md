@@ -1,10 +1,9 @@
-### AILI Smarter Search and Answer generation
-This reposity maintains the code used in the IBM CE-ATO AILI project.
+### Smarter Search and Answer generation
 
 This code implements this architecture for AILI smarter search and answer generation.
 ![aili](https://github.com/kamago/CE-AILI/blob/nirandi/AILI_architecture.png)
 
-Following services are hosted in the IBM Cloud - Australian Taxanation Office (2791946) acount.
+Following services are hosted in the IBM Cloud.
 1. IBM Watsonx Discovery 
 2. watsonx.ai service 
 You must have access to this account. 
@@ -43,7 +42,7 @@ Upload the data file `ibm_pr_clean.json` in to the data folder. [Link to the dat
 2. Set `ingest_pipeline_id` Provide a name for your pipeline.
 3. Run `python ingest.py` and it will ingest the documents to your index. The code creates a elasticsearch pipeline and generates embeddings using the BGE model and elserv2 model in Watsonx Discovery. 
 
-(Optional) Additional setup: If you want to use another embedding bring your own embedding model as describred here [BYOM.md](https://github.com/kamago/CE-AILI/blob/nirandi/src/byom.md) in to elastic search and change the index mapping and the pipeline accordinly in the `ingest.py` code with the correct model names. 
+(Optional) Additional setup: If you want to use another embedding bring your own embedding model as describred here [BYOM.md](https://github.com/nirandiw/t3-oct-wxd-enablement/blob/main/src/byom.md) in to elastic search and change the index mapping and the pipeline accordinly in the `ingest.py` code with the correct model names. 
 
 Note: Sometimes bulk ingest fails. Restart the script excluding the files that were successful. Re-upload partially uploaded json files will not create duplicates. 
 
