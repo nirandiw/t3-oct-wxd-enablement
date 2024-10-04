@@ -46,14 +46,14 @@ Upload the data file `data.json` in to the data folder.
 Note: Sometimes bulk ingest fails. Restart the script excluding the files that were successful. Re-upload partially uploaded json files will not create duplicates. 
 
 ### Search using `search.py`
-1. Note your index. The index IBM CE created for AILI is `aili-hybrid-bge`. You can reuse it for searching. 
+1. Note your index. The index here is `aili-hybrid-bge`. You can reuse it for searching. 
 2. Change the `user_query` to your question. 
 3. Run `python search.py`. 
 4. You can see the results returned from Watsonx Discovery. 
 
 ### Queries formatted in `queries.py`
 
-We used a hybrid search approach for AILI.
+We used a hybrid search approach.
 
 `querires.py` contains example queries.
 
@@ -74,7 +74,7 @@ Variables are defined in `queries.py`.
 We ignore any duplicate documents retrieved and returns the total match on the deduplicated retrieved results.
 
 ### Generate LLM answers using `answer.py`
-`answer.py` follows a simple RAG implementation of AILI, using Watsonx Discovery and watsonx.ai and stores the answers in a outputfile. 
+`answer.py` follows a simple RAG implementation, using Watsonx Discovery and watsonx.ai and stores the answers in a outputfile. 
 
 1. Get your `deployment id` and `space id` from watsonx.ai for the answe-generation prompt (i.e., `aili_answer`).  
   1.2 Pass your deployment id in the function `gen_answer()`  
@@ -85,7 +85,7 @@ We ignore any duplicate documents retrieved and returns the total match on the d
 
 ### Generate new questions using `questions.py`
 
-Generates AILI simulated questions for two personas (1) Public and (2) Tax professional. Because we only had access to limited number of questions we simulated possible questions using this script. 
+Generates simulated questions for two personas (1) Public and (2) Tax professional. Because we only had access to limited number of questions we simulated possible questions using this script. 
 
 The question generation process is (1) Sample `100` documents (2) For each document generate `3` questions for each persona. 
 
