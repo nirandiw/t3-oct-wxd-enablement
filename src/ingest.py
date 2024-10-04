@@ -14,7 +14,7 @@ def create_hybrid_pipeline(ingest_pipeline_id, client):
         processors=[
             {
                 "inference": {
-                    "model_id": ".elser_model_2",
+                    "model_id": ".elser_model_2_linux-x86_64",
                     "input_output": 
                         {"input_field": "web_text",
                          "output_field": "web_text_embedding"}
@@ -32,7 +32,7 @@ def create_hybrid_pipeline(ingest_pipeline_id, client):
             # },
             {
                 "inference": {
-                    "model_id": "baai__bge-large-en-v1.5",
+                    "model_id": "sentence-transformers__all-minilm-l12-v2", #"baai__bge-large-en-v1.5",
                     "input_output": {
                         "input_field": "web_text",
                         "output_field": "web_text_sentence_bge_embedding",
@@ -62,7 +62,7 @@ def create_hybrid_index(index_name, client):
                 # },
                  "web_text_sentence_bge_embedding": {
                     "type": "dense_vector",
-                    "dims": 1024,
+                    "dims": 384,
                     "similarity": "cosine",
                 },
             }
@@ -86,7 +86,7 @@ def gen_processed(f, index_name, ingest_pipeline_id):
     docs = load_json(f)
     print(len(docs), "documents loaded in", f)
     for d in docs:
-        print(d['id'])
+        # print(d['id'])
         yield {
             "_index": index_name,
             "_id": d["id"],
