@@ -29,8 +29,7 @@ Sections below describe the components in our architecture.
 Run `python connection.py` and ensure your Watsonx Discovery credentials are working. 
 
 ### Upload data. 
-Upload the data file `ibm_pr_clean.json` in to the data folder. [Link to the data](https://govteams.sharepoint.com/:u:/r/sites/atoibm/Shared%20Documents/06.%20Data/pr_clean.zip?csf=1&web=1&e=aHTGLr)
-
+Upload the data file `data.json` in to the data folder. 
 ### Chunk the data using `chunk.py`
 1. Create the folder `./data/chunks`.
 2. Go the to `src` folder in the terminal.
@@ -78,7 +77,6 @@ We ignore any duplicate documents retrieved and returns the total match on the d
 `answer.py` follows a simple RAG implementation of AILI, using Watsonx Discovery and watsonx.ai and stores the answers in a outputfile. 
 
 1. Get your `deployment id` and `space id` from watsonx.ai for the answe-generation prompt (i.e., `aili_answer`).  
-  1.1 The  deployment id used in this script is the answer-generation prompt deployed during the IBM-ATO AILI PoC.  
   1.2 Pass your deployment id in the function `gen_answer()`  
   1.3 Set the space id in the `main()` function. 
 2. Set `ref_set = pd.read_excel('../<your questions>.xlsx')` to your question set. 
@@ -92,7 +90,6 @@ Generates AILI simulated questions for two personas (1) Public and (2) Tax profe
 The question generation process is (1) Sample `100` documents (2) For each document generate `3` questions for each persona. 
 
 1. Get your `deployment id` and `space id` from the watsonx.ai for your question-generation prompt (i.e., `aili_questions_llama`)  
-  1.1 The deployement id used in this script is the question-generation prompt deployed during the IBM-ATO AILI PoC.  
   1.2 Pass your deploymentid in the function `gen_questions()`
   1.3 Set the space id in the `main()` function. 
 2. Run `python questions.py` 
